@@ -71,6 +71,7 @@
       </div>
     </div>
     <script>
+        //Create section
       const array = [];
 
       function addRow() {
@@ -115,7 +116,7 @@
         const data1 = document.getElementById("row");
         data1.innerHTML = row1;
       }
-
+      //Delete Section
       function deleteRow(id) {
         array.splice(id, 1);
         updateIds();
@@ -127,7 +128,7 @@
           element.id = index;
         });
       }
-
+      //edit section
       function editRow(id) {
         const edit = array[id];
         document.getElementById("input1").value = edit.code;
