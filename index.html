@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Table</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    <div class="main m-20">
+      <h1 class="font-sans text-4xl">
+        Table CRUD-Create Update Read Delete operations
+      </h1>
+      <div class="input pt-10 pb-10">
+        <form action="">
+          <input
+            type="text"
+            name="code"
+            id="input1"
+            placeholder="Country Code"
+            class="border border-black border-solid"
+            required
+          />
+          <input
+            type="text"
+            id="input2"
+            name="country"
+            placeholder="Country Name"
+            class="border border-black border-solid"
+            required
+          />
+          <input
+            type="text"
+            id="input3"
+            name="region"
+            placeholder="Region"
+            class="border border-black border-solid"
+            required
+          />
+
+          <button
+            class="border border-black border-rose-500"
+            onclick="addRow()"
+            id="add"
+          >
+            Add
+          </button>
+        </form>
+
+        <div class="mainTable mt-10 w-auto">
+          <table
+            id="dataTable"
+            class="table-auto border-collapse border border-black"
+          >
+            <thead class="">
+              <tr>
+                <th class="border border-black">S.No</th>
+                <th class="border border-black required">Country Code</th>
+                <th class="border border-black required">Country Name</th>
+                <th class="border border-black required">Region</th>
+                <th class="border border-black" colspan="2">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="row"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      const array = [];
+
+      function addRow() {
+        const code = document.getElementById("input1").value;
+        const country = document.getElementById("input2").value;
+        const region = document.getElementById("input3").value;
+        if (code.trim() == "" || country.trim() == "" || region.trim() == "") {
+          alert("Please fill all the fields");
+          return;
+        }
+        const obj = {
+          id: array.length,
+          code: code,
+          country: country,
+          region: region,
+        };
+        array.push(obj);
+        renderTable();
+
+        document.getElementById("input1").value = "";
+        document.getElementById("input2").value = "";
+        document.getElementById("input3").value = "";
+      }
+
+      function renderTable() {
+        const row1 = array
+          .map((e) => {
+            return `<tr>
+                <td class="border border-black">${e.id + 1}</td>
+                <td class="border border-black">${e.code}</td>
+                <td class="border border-black">${e.country}</td>
+                <td class="border border-black">${e.region}</td>
+                <td class="border border-black"><i class="fa-solid fa-trash" onclick="deleteRow(${
+                  e.id
+                })"></i></td>
+                <td class="border border-black"><i class="fa-solid fa-pen-to-square" onclick="editRow(${
+                  e.id
+                })"></i></td>
+             </tr>`;
+          })
+          .join("");
+        const data1 = document.getElementById("row");
+        data1.innerHTML = row1;
+      }
+
+      function deleteRow(id) {
+        array.splice(id, 1);
+        updateIds();
+        renderTable();
+      }
+
+      function updateIds() {
+        array.map((element, index) => {
+          element.id = index;
+        });
+      }
+
+      function editRow(id) {
+        const edit = array[id];
+        document.getElementById("input1").value = edit.code;
+        document.getElementById("input2").value = edit.country;
+        document.getElementById("input3").value = edit.region;
+
+        const addButton = document.getElementById("add");
+        addButton.textContent = "Update";
+        addButton.onclick = function () {
+          updateRow(id);
+        };
+        addButton.dataset.rowIndex = id; 
+      }
+
+      function updateRow(id) {
+        const code = document.getElementById("input1").value;
+        const country = document.getElementById("input2").value;
+        const region = document.getElementById("input3").value;
+        if (code.trim() == "" || country.trim() == "" || region.trim() == "") {
+          alert("Please fill all the fields");
+          return;
+        }
+        array[id] = {
+          id: id,
+          code: code,
+          country: country,
+          region: region,
+        };
+        renderTable();
+
+        document.getElementById("input1").value = "";
+        document.getElementById("input2").value = "";
+        document.getElementById("input3").value = "";
+
+        const addButton = document.getElementById("add");
+        addButton.textContent = "Add";
+        addButton.onclick = function () {
+          addRow();
+        };
+      }
+    </script>
+    <script
+      src="https://kit.fontawesome.com/4a3d56b7f8.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
